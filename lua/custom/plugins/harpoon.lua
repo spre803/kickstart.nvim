@@ -27,16 +27,16 @@ return {
           })
           :find()
       end
-      vim.keymap.set('n', '<leader>a', function()
+      vim.keymap.set('n', '<leader>A', function()
         local harpoon = require 'harpoon'
         toggle_telescope_with_harpoon(harpoon:list())
       end, { desc = 'Open harpoon window' })
     end,
     keys = {
       {
-        '<leader>A',
+        '<leader>a',
         function()
-          require('harpoon'):list():append()
+          require('harpoon'):list():add()
         end,
         desc = 'harpoon file',
       },
