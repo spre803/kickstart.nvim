@@ -178,6 +178,10 @@ vim.keymap.set('n', '<leader>rs', ':%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left
 
 vim.keymap.set('n', '<leader>rl', ':s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>')
 
+-- move lines up and down in visual mode
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -622,13 +626,15 @@ require('lazy').setup({
 
                 name = '@vue/typescript-plugin',
                 location = '/Users/christophsprenger/.nvm/versions/node/v20.18.0/lib/node_modules/@vue/typescript-plugin',
-                languages = { 'javascript', 'typescript', 'vue' },
+                languages = { 'javascript', 'typescript', 'vue', 'typescriptreact', 'typescript.tsx' },
               },
             },
           },
           filetypes = {
             'javascript',
             'typescript',
+            'typescriptreact',
+            'typescript.tsx',
             'vue',
           },
         },
