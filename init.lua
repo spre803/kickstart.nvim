@@ -120,8 +120,13 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 
+vim.opt.wrap = false
+
+vim.opt.swapfile = false
+
 -- Save undo history
 vim.opt.undofile = true
+vim.opt.undodir = os.getenv 'HOME' .. '/.config/nvim/undodir'
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -172,6 +177,10 @@ vim.keymap.set('n', '<leader>k', '15kzz')
 vim.keymap.set('v', '<leader>k', '15kzz')
 
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+
+vim.keymap.set('n', 'gb', function()
+  vim.cmd 'e#'
+end, { desc = 'Go back to last edited file.' })
 
 -- replace string
 vim.keymap.set('n', '<leader>rs', ':%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>')
@@ -600,47 +609,30 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      -- Enable the following language servers
-      --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-      --
-      --  Add any additional override configuration in the following tables. Available keys are:
-      --  - cmd (table): Override the default command used to start the server
-      --  - filetypes (table): Override the default list of associated filetypes for the server
-      --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-      --  - settings (table): Override the default settings passed when initializing the server.
-      --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {
-          init_options = {
-            plugins = {
-              {
-
-                name = '@vue/typescript-plugin',
-                location = '/Users/christophsprenger/.nvm/versions/node/v20.18.0/lib/node_modules/@vue/typescript-plugin',
-                languages = { 'javascript', 'typescript', 'vue', 'typescriptreact', 'typescript.tsx' },
-              },
+      vim.lsp.config('ts_ls', {
+        init_options = {
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = '/Users/christophsprenger/.nvm/versions/node/v22.12.0/lib/node_modules/@vue/typescript-plugin',
+              languages = { 'javascript', 'typescript', 'vue' },
             },
           },
-          filetypes = {
-            'javascript',
-            'typescript',
-            'typescriptreact',
-            'typescript.tsx',
-            'vue',
-          },
         },
-        --
-        -- phpactor = {},
+        filetypes = {
+          'javascript',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+          'vue',
+        },
+      })
+
+      vim.lsp.enable { 'ts_ls' }
+
+      -- require('lspconfig').vue_ls.setup {}
+
+      local servers = {
 
         intelephense = {},
 
@@ -654,19 +646,12 @@ require('lazy').setup({
           },
         },
 
-        -- volar = {},
-
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
               completion = {
                 callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -736,7 +721,13 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- javascript = { 'prettier' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        vue = { 'prettier' },
+        html = { 'prettier' },
+        json = { 'prettier' },
+        css = { 'prettier' },
+        markdown = { 'prettier' },
         -- php = { 'pint' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
