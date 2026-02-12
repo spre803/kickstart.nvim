@@ -117,7 +117,6 @@ return {
       --   expr = true,
       -- },
     },
-    event = { 'VeryLazy' },
     opts = {
       lsp_server = 'intelephense',
       features = {
