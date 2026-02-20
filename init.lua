@@ -635,9 +635,9 @@ require('lazy').setup({
           },
         },
 
-        intelephense = {},
-
         tailwindcss = {},
+
+        intelephense = {},
 
         jsonls = {
           settings = {
